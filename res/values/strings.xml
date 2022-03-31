@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Homework_04</string>
+    <string name="title">Food Icon</string>
+    <string name="figure">Figure</string>
+    <string name="corner">Corner</string>
+    <string name="text">Title</string>
+    <string name="hint">The text you want to display</string>
+    <string name="color">Color</string>
+    <string name="background">Background</string>
+    <string name="red">red</string>
+    <string name="orange">orange</string>
+    <string name="yellow">yellow</string>
+    <string name="green">green</string>
+    <string name="blue">blue</string>
+    <string name="dark_blue">dark_blue</string>
+    <string name="purple">purple</string>
+    <string name="light_gray">light_gray</string>
+    <string name="gray">gray</string>
+    <string name="black">black</string>
+    <string name="generate">Generate</string>
+    <string name="save_btn">save icon</string>
+    <string name="icon_library">Icon Library</string>
+</resources>
