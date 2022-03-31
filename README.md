@@ -48,7 +48,7 @@
 
 四个 widgets 还要互相关联 一开始不知道做什么，无意间看到了之前装的俩app
 
-<img src="https://pic.freanja.cn/images/2022/03/31/202203311355316.png" alt="inspiration" style="zoom:33%;" />
+<img src="https://pic.freanja.cn/images/2022/03/31/202203311355316.png" alt="inspiration" width=33% height=33% />
 
 这俩 app 的作用就是可以给macOS的图标换皮不会还有人不知道macOS的app可以非常方便的换皮吧😏）
 
@@ -60,7 +60,7 @@
 
 > 最后的效果（因为是后面补的，所以从压缩的视频里面截的图，高糊警告⚠️：
 
-<img src="https://pic.freanja.cn/images/2022/03/31/202203311356907.png" alt="food_icon_v1" style="zoom:33%;" />
+<img src="https://pic.freanja.cn/images/2022/03/31/202203311356907.png" alt="food_icon_v1" width=33% height=33% />
 
 大概实现的效果是：
 
@@ -102,11 +102,11 @@
 
 > 内卷要不得啊，虽然这次学了蛮多的，把上学期欠下的SD存储的坑也填上了，但真的太累了，通了一个晚上，最终效果还算满意，多图预警⚠️
 
-<img src="https://pic.freanja.cn/images/2022/03/31/202203311429679.png" alt="homePage" style="zoom:25%;" /><img src="https://pic.freanja.cn/images/2022/03/31/202203311431125.png" alt="ProgressBar" style="zoom:25%;" /><img src="https://pic.freanja.cn/images/2022/03/31/202203311433451.png" alt="generated" style="zoom:25%;" />
+<img src="https://pic.freanja.cn/images/2022/03/31/202203311429679.png" alt="homePage" width=25% height=25% /><img src="https://pic.freanja.cn/images/2022/03/31/202203311431125.png" alt="ProgressBar" width=25% height=25%  /><img src="https://pic.freanja.cn/images/2022/03/31/202203311433451.png" alt="generated" width=25% height=25%  />
 
 ##### ⬆️MainActivity部分
 
-<img src="https://pic.freanja.cn/images/2022/03/31/202203311434012.png" alt="ListView" style="zoom:25%;" /><img src="https://pic.freanja.cn/images/2022/03/31/202203311435593.png" alt="DetailDialog" style="zoom:25%;" /><img src="https://pic.freanja.cn/images/2022/03/31/202203311436376.png" alt="SystemPhotoAlbum" style="zoom:25%;" />
+<img src="https://pic.freanja.cn/images/2022/03/31/202203311434012.png" alt="ListView" width=25% height=25% /><img src="https://pic.freanja.cn/images/2022/03/31/202203311435593.png" alt="DetailDialog" width=25% height=25%/><img src="https://pic.freanja.cn/images/2022/03/31/202203311436376.png" alt="SystemPhotoAlbum" width=25% height=25% />
 
 ##### ⬆️ListActivity&Album部分
 
@@ -192,7 +192,7 @@ private void checkNeedPermissions() {
 
 ![reply2](https://pic.freanja.cn/images/2022/03/31/202203311504638.png)
 
-**OHHHHHHHHHHHHHHHHHH 🥳**
+***OHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH 🥳***
 
 
 
