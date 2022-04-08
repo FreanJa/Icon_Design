@@ -1,29 +1,19 @@
-package com.example.homework_04;
+package com.example.homework_04.Fragment;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
+import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -41,14 +31,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+
+import com.example.homework_04.Activities.MainActivity;
+import com.example.homework_04.R;
+import com.example.homework_04.Utils.BitmapUtil;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.EventListener;
+import java.util.Stack;
 
-@SuppressLint("HandlerLeak")
-public class MainActivity extends AppCompatActivity {
-
+public class HomePage_fm extends Fragment {
     private ImageView imageView;
     private LinearLayout icon_bg;
     private TextView icon_text;
@@ -62,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView progress;
     private TextView icon_name;
     private Button save_btn;
-    private Button to_library;
 
     private Boolean isShow = Boolean.FALSE;
     private String title;
@@ -73,15 +69,17 @@ public class MainActivity extends AppCompatActivity {
     private final Handler handler = new Handler();
     private static final int COMPLETED = 0;
     private static final int REQUEST_CODE = 1;
+    private static final String ARGS_PAGE = "args_page";
+    private int mPage;
 
     private static final String[] foods = {"餐盘", "冰淇淋", "蛋糕", "饭团", "汉堡包", "火锅", "鸡腿", "咖啡", "水壶1", "水壶2", "面包", "面条", "奶酪", "牛奶", "牛排", "啤酒", "披萨", "千层", "烧烤", "薯条", "糖果", "甜甜圈", "吐司", "雪糕", "奶茶", "纸杯蛋糕"};
     private static final int[] figure = {R.drawable.shiwu, R.drawable.bingqilin, R.drawable.dangao, R.drawable.fantuan, R.drawable.hanbaobao, R.drawable.huoguo, R.drawable.jitui, R.drawable.kafei, R.drawable.kaishui1, R.drawable.kaishui2, R.drawable.mianbao, R.drawable.mianbao, R.drawable.nailao, R.drawable.niunai, R.drawable.niupai, R.drawable.pijiu, R.drawable.pisa, R.drawable.qianceng, R.drawable.shaokao, R.drawable.shutiao, R.drawable.tangguo, R.drawable.tiantianquan, R.drawable.tusi, R.drawable.xuegao, R.drawable.yinliao, R.drawable.zhibeidangao};
     private ArrayList<String> new_icons = new ArrayList<>();
 
-
     private final Handler mHandler;
     {
         mHandler = new Handler() {
+            @SuppressLint("HandlerLeak")
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void handleMessage(@NonNull Message msg) {
@@ -100,51 +98,38 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.R)
+    public static HomePage_fm newInstance(int page) {
+        Bundle args = new Bundle();
+
+        args.putInt(ARGS_PAGE, page);
+        HomePage_fm fm = new HomePage_fm();
+        fm.setArguments(args);
+        return fm;
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        checkNeedPermissions();
-        initViewAndListener();
+        assert getArguments() != null;
+        mPage = getArguments().getInt(ARGS_PAGE);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.R)
-    private void checkNeedPermissions() {
-        boolean permission_storage = Environment.isExternalStorageManager();
-        int permission_write = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        int permission_read = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_home_page_fm, container, false);
+        initViewAndListener(view);
 
-        if (!permission_storage) {
-            Toast.makeText(this, "Requesting file management permission", Toast.LENGTH_SHORT).show();
-            startActivityForResult(new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION), 0);
-        }
-        else {
-            Toast.makeText(this, "Already get management all files permission", Toast.LENGTH_SHORT).show();
-        }
 
-        if (permission_write!=PackageManager.PERMISSION_GRANTED
-        || permission_read!=PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "Requesting media permission", Toast.LENGTH_SHORT).show();
-            ActivityCompat.requestPermissions(this, new String[]{
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-        }
-        else {
-            Toast.makeText(this, "Already get media permission", Toast.LENGTH_SHORT).show();
-        }
-
+        return view;
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
-    private void initViewAndListener() {
-        icon_bg = (LinearLayout)findViewById(R.id.icon_bg);
-        imageView = (ImageView)findViewById(R.id.figure);
+    private void initViewAndListener(View view) {
+        icon_bg = view.findViewById(R.id.icon_bg);
+        imageView = view.findViewById(R.id.figure);
 
-        icon_text = (TextView)findViewById(R.id.icon_text);
-        CheckBox showText = (CheckBox) findViewById(R.id.showTitle);
+        icon_text = view.findViewById(R.id.icon_text);
+        CheckBox showText = view.findViewById(R.id.showTitle);
         showText.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -153,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        EditText editText = (EditText) findViewById(R.id.icon_name);
+        EditText editText = view.findViewById(R.id.icon_name);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -175,13 +160,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        SeekBar seekBar = (SeekBar) findViewById(R.id.corner);
+        SeekBar seekBar = view.findViewById(R.id.corner);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                 drawable = (GradientDrawable) icon_bg.getBackground();
-                 drawable.setCornerRadius((float)i*200/100);
+                drawable = (GradientDrawable) icon_bg.getBackground();
+                drawable.setCornerRadius((float)i*200/100);
             }
 
             @Override
@@ -195,19 +180,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Spinner figure_selector = (Spinner) findViewById(R.id.figure_selector);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, foods);
+        Spinner figure_selector = view.findViewById(R.id.figure_selector);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, foods);
         figure_selector.setAdapter(adapter);
         figure_selector.setOnItemSelectedListener(new SpinnerSelectedListener());
         figure_selector.setVisibility(View.VISIBLE);
 
-        RadioGroup bg_color = (RadioGroup) findViewById(R.id.background_color);
+        RadioGroup bg_color = view.findViewById(R.id.background_color);
         bg_color.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//            @SuppressLint("ResourceAsColor")
+            //            @SuppressLint("ResourceAsColor")
 //            @SuppressLint("ResourceType")
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                RadioButton bc_btn = (RadioButton) findViewById(i);
+                RadioButton bc_btn = view.findViewById(i);
                 drawable = (GradientDrawable) icon_bg.getBackground();
                 drawable.setColor(bc_btn.getTextColors());
 
@@ -219,18 +204,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        RadioGroup fg_color = (RadioGroup) findViewById(R.id.figure_color);
+        RadioGroup fg_color = view.findViewById(R.id.figure_color);
         fg_color.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
 
-                RadioButton fc_btn = (RadioButton) findViewById(i);
+                RadioButton fc_btn = view.findViewById(i);
                 imageView.setImageTintList(fc_btn.getTextColors());
 
             }
         });
 
-        progressLayout = (RelativeLayout) findViewById(R.id.progress_layout);
+        progressLayout = view.findViewById(R.id.progress_layout);
         progressLayout.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -240,15 +225,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        canvas = (RelativeLayout) findViewById(R.id.canvas);
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        progress = (TextView) findViewById(R.id.progress_text);
-        testView = (ImageView) findViewById(R.id.generated_icon);
-        icon_name = (TextView) findViewById(R.id.pic_name);
-        progressArea = (RelativeLayout) findViewById(R.id.progress_area);
-        generatedLayout = (RelativeLayout) findViewById(R.id.generated_layout);
+        canvas = view.findViewById(R.id.canvas);
+        progressBar = view.findViewById(R.id.progress_bar);
+        progress = view.findViewById(R.id.progress_text);
+        testView = view.findViewById(R.id.generated_icon);
+        icon_name = view.findViewById(R.id.pic_name);
+        progressArea = view.findViewById(R.id.progress_area);
+        generatedLayout = view.findViewById(R.id.generated_layout);
 
-        Button generateIcon = (Button) findViewById(R.id.generate_btn);
+        Button generateIcon = view.findViewById(R.id.generate_btn);
         generateIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -267,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        save_btn = (Button) findViewById(R.id.save_btn);
+        save_btn = view.findViewById(R.id.save_btn);
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -278,47 +263,93 @@ public class MainActivity extends AppCompatActivity {
 
                     pStatus = 0;
                     progressLayout.setVisibility(View.INVISIBLE);
+//                    System.out.println("Save icon success");
 
-                    Toast.makeText(MainActivity.this, "Save icon success", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Save icon success", Toast.LENGTH_SHORT).show();
 
                 }
             }
         });
 
-        to_library = (Button) findViewById(R.id.toLib);
-        to_library.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                JumpToLibrary();
-            }
-        });
+//        to_library = view.findViewById(R.id.toLib);
+//        to_library.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                PageJump("com.homework_04.intent.library.ACTION_START");
+//            }
+//        });
+//
+//        to_Community = (Button) findViewById(R.id.toCom);
+//        to_Community.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                PageJump("com.homework_04.intent.community.ACTION_START");
+//            }
+//        });
 
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 1:
-                if (grantResults.length>0 && grantResults[0]== PackageManager.PERMISSION_GRANTED) {
-                    System.out.println("get permission success");
-                }
-                else {
-                    Toast.makeText(this, "The READ&WRITE PERMISSION of the SD card cannot be obtained", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    class SpinnerSelectedListener implements AdapterView.OnItemSelectedListener {
+
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            imageView.setImageResource(figure[i]);
+        }
+
+        public void onNothingSelected(AdapterView<?> arg0) {
         }
     }
 
-    private void JumpToLibrary() {
-        String action = "com.homework_04.intent.library.ACTION_START";
-        Intent intent = new Intent(action);
-//        intent.putExtra("new_icons", (Parcelable) new_icons);
-        intent.putStringArrayListExtra("new_icons", new_icons);
-        startActivityForResult(intent, REQUEST_CODE);
-        overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top);
+    public static Bitmap getBitIconFromView(View view, float scale) {
+        Matrix matrix = new Matrix();
+        matrix.postScale(scale, scale);
+        final boolean drawingCacheEnabled = true;
+        view.setDrawingCacheEnabled(drawingCacheEnabled);
+        view.buildDrawingCache(drawingCacheEnabled);
+        final Bitmap drawingCache = view.getDrawingCache();
+        Bitmap bitIcon;
+        if (drawingCache != null) {
+            bitIcon = Bitmap.createBitmap(drawingCache, 0, 0, drawingCache.getWidth(), drawingCache.getHeight(), matrix, true);
+            view.setDrawingCacheEnabled(false);
+        }
+        else {
+            bitIcon = null;
+        }
+
+        return bitIcon;
+    }
+
+    private class LoadThread extends Thread {
+        @Override
+        public void run() {
+            while (pStatus <= 100) {
+                handler.post(new Runnable() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void run() {
+                        progressBar.setProgress(pStatus);
+                        progress.setText(pStatus + " %");
+                    }
+                });
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (pStatus == 100){ break; }
+                pStatus++;
+            }
+            try {
+                Thread.sleep(100);
+
+                Message msg = new Message();
+                msg.what = COMPLETED;
+                mHandler.sendMessage(msg);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -364,68 +395,4 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    class SpinnerSelectedListener implements AdapterView.OnItemSelectedListener {
-
-        @Override
-        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            imageView.setImageResource(figure[i]);
-        }
-
-        public void onNothingSelected(AdapterView<?> arg0) {
-        }
-    }
-
-    public static Bitmap getBitIconFromView(View view, float scale) {
-        Matrix matrix = new Matrix();
-        matrix.postScale(scale, scale);
-        final boolean drawingCacheEnabled = true;
-        view.setDrawingCacheEnabled(drawingCacheEnabled);
-        view.buildDrawingCache(drawingCacheEnabled);
-        final Bitmap drawingCache = view.getDrawingCache();
-        Bitmap bitIcon;
-        if (drawingCache != null) {
-            bitIcon = Bitmap.createBitmap(drawingCache, 0, 0, drawingCache.getWidth(), drawingCache.getHeight(), matrix, true);
-            view.setDrawingCacheEnabled(false);
-        }
-        else {
-            bitIcon = null;
-        }
-
-        return bitIcon;
-    }
-
-
-    private class LoadThread extends Thread {
-        @Override
-        public void run() {
-            while (pStatus <= 100) {
-                handler.post(new Runnable() {
-                    @SuppressLint("SetTextI18n")
-                    @Override
-                    public void run() {
-                        progressBar.setProgress(pStatus);
-                        progress.setText(pStatus + " %");
-                    }
-                });
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if (pStatus == 100){ break; }
-                pStatus++;
-            }
-            try {
-                Thread.sleep(100);
-
-                Message msg = new Message();
-                msg.what = COMPLETED;
-                mHandler.sendMessage(msg);
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 }
-

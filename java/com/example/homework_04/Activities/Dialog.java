@@ -1,4 +1,4 @@
-package com.example.homework_04;
+package com.example.homework_04.Activities;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,14 +19,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.homework_04.R;
+import com.example.homework_04.Utils.BitmapUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Random;
-import java.util.TreeMap;
 
 public class Dialog extends AppCompatActivity {
 
@@ -158,7 +159,7 @@ public class Dialog extends AppCompatActivity {
     }
 
     private void backPreActivity() {
-        Intent intent = new Intent(this, LibraryActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         setResult(tag?RESULT_OK:RESULT_CANCELED, intent);
         finish();
     }

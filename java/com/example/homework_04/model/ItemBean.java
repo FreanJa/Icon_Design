@@ -1,4 +1,4 @@
-package com.example.homework_04;
+package com.example.homework_04.model;
 
 import android.graphics.Bitmap;
 

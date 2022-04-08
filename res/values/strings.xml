@@ -20,4 +20,8 @@
     <string name="generate">Generate</string>
     <string name="save_btn">save icon</string>
     <string name="icon_library">Icon Library</string>
+    <string name="title_tv">The Title</string>
+    <string name="description_tv">Description</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
